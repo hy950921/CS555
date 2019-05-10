@@ -1,0 +1,327 @@
+19,25d18
+< 
+< // CS 555 - Project 2
+< // Go-Back N Protocol
+< // Abdullah Alaqeel - aalaqeel@gmu.edu
+< // Yu Han - yhan27@gmu.edu
+< 
+< 
+76,109c69,71
+< int CheckSumming(const struct pkt packet) {
+<     struct pkt p;
+<     p = packet;
+<     int CheckSum = 0;
+<     for (int i = 0; i < sizeof(p.payload); i++) {
+<         CheckSum += (unsigned char)p.payload[i];
+<     }
+<     CheckSum += p.seqnum;
+<     CheckSum += p.acknum;
+<     return CheckSum;
+< }
+< #define BUFFERSIZE 100
+< 
+< struct Sender {
+<     float Rtt;
+<     int WindowSize;
+<     int Base;   //the sequence number of the oldest unacknowledged packet
+<     int NextSeqnum;     //the sequence number of the next packet to be sent
+<     struct pkt SenderPacket[BUFFERSIZE]; // 8 is the windowsize 
+< };
+< 
+< struct Receiver {
+<     int ExpectedSeqnum; //This value is held in the variable expectedseqnum.
+<     struct pkt ReceiverPacket;
+< };
+< 
+< struct Sender A;
+< struct Receiver B;
+< 
+< void printHex(char* data) {
+<     for (int i = 0; i < sizeof(data); i++)
+<         printf("%X ", data[i]);
+<     printf("\n");
+< }
+---
+> 
+> 
+> 
+114,137d75
+<     
+<     printf("A_Output\n    Base = %d, NextSeqnum = %d\n    Message: ", A.Base, A.NextSeqnum);
+<     printHex(message.data);
+<     
+<     if (A.NextSeqnum == BUFFERSIZE) { // if buffer is full
+<         printf("Buffer is full.\nGoodbye.\n");
+<     }  
+<     else if (A.NextSeqnum < (A.Base + A.WindowSize)) { 
+<         printf("    *** sending the message ***\n");
+<         
+<         // loading the message into the packet
+<         memset(A.SenderPacket[A.NextSeqnum].payload, 0, 20);
+<         for (int i = 0; i < sizeof(message.data); i++) {
+<             A.SenderPacket[A.NextSeqnum].payload[i] = message.data[i];
+<         }
+<         
+<         // preparing the packet
+<         A.SenderPacket[A.NextSeqnum].seqnum = A.NextSeqnum;
+<         A.SenderPacket[A.NextSeqnum].checksum = CheckSumming(A.SenderPacket[A.NextSeqnum]);
+<         
+<         tolayer3(0, A.SenderPacket[A.NextSeqnum]);
+<         
+<         // starting the timer if necessary
+<         if (A.Base == A.NextSeqnum) starttimer(0, A.Rtt);
+139,144d76
+<         A.NextSeqnum++;
+<     }
+<     
+<     else { // if window size is full
+<         printf("    *** ignoring the message ***\n");
+<     }
+150,168c82
+<     printf("A_input\n    Base = %d, NextSeqnum = %d\n", A.Base, A.NextSeqnum);
+<     
+<     if (packet.checksum == CheckSumming(packet)) {
+<         printf("    ***checksum is good***\n");
+<         A.Base = packet.acknum + 1;
+<         printf("    A_input: ACK = %d, new Base = %d\n", packet.acknum, A.Base);
+<         if (A.Base == A.NextSeqnum) {
+<             stoptimer(0);
+<             printf("    Stopped timer\n");
+<         }
+<         else {
+<             starttimer(0, A.Rtt);
+<             printf("    Started timer\n");
+<         }
+<     }
+<     else {
+<         printf("    ***checksum is bad***\n");
+<     }
+<     
+---
+> 
+174,183c88,89
+<     printf("*** Timeout ***\n    Base = %d, Timer Started.\n    Resending packets:\n", A.Base);
+<     starttimer(0, A.Rtt);
+<     
+<     for (int i = A.Base; i < A.NextSeqnum; i++) {
+<         printf("     %d- (seq=%d): ", i, A.SenderPacket[i].seqnum);
+<         printHex(A.SenderPacket[i].payload);
+<         tolayer3(0, A.SenderPacket[i]);
+<     }
+<     
+< }
+---
+> 
+> }  
+189,192c95
+<     A.WindowSize = 8;
+<     A.Rtt = 20;
+<     A.Base = 1;
+<     A.NextSeqnum = 1;
+---
+> 
+199,205d101
+<     B.ExpectedSeqnum = 1;
+<     
+<     // setting up the default packet
+<     B.ReceiverPacket.seqnum = 0;
+<     B.ReceiverPacket.acknum = 0;
+<     memset(B.ReceiverPacket.payload, 0, 20);
+<     B.ReceiverPacket.checksum = CheckSumming(B.ReceiverPacket);
+212,233c108
+<     printf("B_input\n    ExpectedSeqnum = %d, packet received(seq = %d): ", B.ExpectedSeqnum, packet.seqnum);
+<     printHex(packet.payload);
+<     
+<     if (packet.checksum == CheckSumming(packet) && packet.seqnum == B.ExpectedSeqnum) {
+<     
+<         printf("    Message is good\n");
+<         tolayer5(1, packet.payload); // delivering the data
+<         
+<         printf("    sending packet(seq = %d)\n", B.ExpectedSeqnum);
+<         B.ReceiverPacket.acknum = B.ExpectedSeqnum;
+<         B.ReceiverPacket.checksum = CheckSumming(B.ReceiverPacket);
+<         
+<         tolayer3(1, B.ReceiverPacket); // sending the ack back to A
+<         
+<         B.ExpectedSeqnum++; // updating the expected seqnum
+<     
+<     }
+<         
+<     else {
+<         printf("    Message is bad\n");
+<         tolayer3(1, B.ReceiverPacket);
+<     }
+---
+> 
+238c113
+< void B_output(struct msg message)
+---
+> void B_output(struct msg message)  
+267c142
+< #define  TIMER_INTERRUPT 0
+---
+> #define  TIMER_INTERRUPT 0  
+279c154
+< int nsim = 0;              /* number of messages from 5 to 4 so far */
+---
+> int nsim = 0;              /* number of messages from 5 to 4 so far */ 
+284c159
+< float lambda;              /* arrival rate of messages from layer 5 */
+---
+> float lambda;              /* arrival rate of messages from layer 5 */   
+294c169
+< 
+---
+>    
+296,297c171,172
+<    char c;
+< 
+---
+>    char c; 
+>   
+301c176
+< 
+---
+>    
+325,327c200,202
+<             /* fill in msg to give with string of same letter */
+<             j = nsim % 26;
+<             for (i=0; i<20; i++)
+---
+>             /* fill in msg to give with string of same letter */    
+>             j = nsim % 26; 
+>             for (i=0; i<20; i++)  
+331c206
+<                  for (i=0; i<20; i++)
+---
+>                  for (i=0; i<20; i++) 
+336,337c211,212
+<             if (eventptr->eventity == A)
+<                A_output(msg2give);
+---
+>             if (eventptr->eventity == A) 
+>                A_output(msg2give);  
+339c214
+<                B_output(msg2give);
+---
+>                B_output(msg2give);  
+345c220
+<             for (i=0; i<20; i++)
+---
+>             for (i=0; i<20; i++)  
+354c229
+<             if (eventptr->eventity == A)
+---
+>             if (eventptr->eventity == A) 
+376,377c251,252
+< 
+< 
+---
+>   
+>   
+396c271
+<     printf("It is likely that random number generation on your machine\n" );
+---
+>     printf("It is likely that random number generation on your machine\n" ); 
+415c290
+< float jimsrand(void)
+---
+> float jimsrand(void) 
+418c293
+<   float x;                   /* individual students may need to change mmm */
+---
+>   float x;                   /* individual students may need to change mmm */ 
+421c296
+< }
+---
+> }  
+426c301
+< 
+---
+>  
+437c312
+< 
+---
+>  
+448c323
+< }
+---
+> } 
+457c332
+<       printf("            INSERTEVENT: future time will be %lf\n",p->evtime);
+---
+>       printf("            INSERTEVENT: future time will be %lf\n",p->evtime); 
+467c342
+<               qold=q;
+---
+>               qold=q; 
+511,512c386,387
+<  for (q=evlist; q!=NULL ; q = q->next)
+<     if ( (q->evtype==TIMER_INTERRUPT  && q->eventity==AorB) ) {
+---
+>  for (q=evlist; q!=NULL ; q = q->next) 
+>     if ( (q->evtype==TIMER_INTERRUPT  && q->eventity==AorB) ) { 
+544,545c419,420
+<    for (q=evlist; q!=NULL ; q = q->next)
+<     if ( (q->evtype==TIMER_INTERRUPT  && q->eventity==AorB) ) {
+---
+>    for (q=evlist; q!=NULL ; q = q->next)  
+>     if ( (q->evtype==TIMER_INTERRUPT  && q->eventity==AorB) ) { 
+549c424
+< 
+---
+>  
+556c431
+< }
+---
+> } 
+574c449
+<       if (TRACE>0)
+---
+>       if (TRACE>0)    
+577c452
+<     }
+---
+>     }  
+580c455
+< /* to do something with the packet after we return back to him/her */
+---
+> /* to do something with the packet after we return back to him/her */ 
+606,607c481,482
+<  for (q=evlist; q!=NULL ; q = q->next)
+<     if ( (q->evtype==FROM_LAYER3  && q->eventity==evptr->eventity) )
+---
+>  for (q=evlist; q!=NULL ; q = q->next) 
+>     if ( (q->evtype==FROM_LAYER3  && q->eventity==evptr->eventity) ) 
+610c485
+< 
+---
+>  
+622c497
+<     if (TRACE>0)
+---
+>     if (TRACE>0)    
+624c499
+<     }
+---
+>     }  
+626c501
+<   if (TRACE>2)
+---
+>   if (TRACE>2)  
+629c504
+< }
+---
+> } 
+633c508
+<   int i;
+---
+>   int i;  
+636c511
+<      for (i=0; i<20; i++)
+---
+>      for (i=0; i<20; i++)  
+640c515
+< 
+---
+>   
