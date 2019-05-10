@@ -1,0 +1,95 @@
+-------
+Round 1: A
+Current DV matrix = [0, 10, 10, 10, 10]
+Last DV matrix = [0, 10, 10, 10, 10]
+Updated from last DV matrix or the same? Updated
+
+Sending DV to node B
+node B received DV from A
+Updating DV matrix at node B
+New DV matrix at node B = [10, 0, 20, 20, 20]
+
+Sending DV to node C
+node C received DV from A
+Updating DV matrix at node C
+New DV matrix at node C = [10, 20, 0, 20, 20]
+
+Sending DV to node D
+node D received DV from A
+Updating DV matrix at node D
+New DV matrix at node D = [10, 20, 20, 0, 20]
+
+Sending DV to node E
+node E received DV from A
+Updating DV matrix at node E
+New DV matrix at node E = [10, 20, 20, 20, 0]
+-------
+Round 2: B
+Current DV matrix = [10, 0, 20, 20, 20]
+Last DV matrix = [10, 0, 99, 99, 99]
+Updated from last DV matrix or the same? Updated
+
+Sending DV to node A
+node A received DV from B
+No change in DV at node A
+
+Sending DV to node C
+node C received DV from B
+No change in DV at node C
+
+Sending DV to node D
+node D received DV from B
+No change in DV at node D
+
+Sending DV to node E
+node E received DV from B
+No change in DV at node E
+-------
+Round 3: C
+Current DV matrix = [10, 20, 0, 20, 20]
+Last DV matrix = [10, 20, 0, 20, 20]
+Updated from last DV matrix or the same? The same
+-------
+Round 4: D
+Current DV matrix = [10, 20, 20, 0, 20]
+Last DV matrix = [10, 20, 20, 0, 20]
+Updated from last DV matrix or the same? The same
+-------
+Round 5: E
+Current DV matrix = [10, 20, 20, 20, 0]
+Last DV matrix = [10, 20, 20, 20, 0]
+Updated from last DV matrix or the same? The same
+-------
+Round 6: A
+Current DV matrix = [0, 10, 10, 10, 10]
+Last DV matrix = [0, 10, 10, 10, 10]
+Updated from last DV matrix or the same? The same
+-------
+Round 7: B
+Current DV matrix = [10, 0, 20, 20, 20]
+Last DV matrix = [10, 0, 99, 99, 99]
+Updated from last DV matrix or the same? The same
+-------
+Round 8: C
+Current DV matrix = [10, 20, 0, 20, 20]
+Last DV matrix = [10, 20, 0, 20, 20]
+Updated from last DV matrix or the same? The same
+-------
+Round 9: D
+Current DV matrix = [10, 20, 20, 0, 20]
+Last DV matrix = [10, 20, 20, 0, 20]
+Updated from last DV matrix or the same? The same
+-------
+Round 10: E
+Current DV matrix = [10, 20, 20, 20, 0]
+Last DV matrix = [10, 20, 20, 20, 0]
+Updated from last DV matrix or the same? The same
+-------
+Final output:
+Node A DV = [0, 10, 10, 10, 10]
+Node B DV = [10, 0, 20, 20, 20]
+Node C DV = [10, 20, 0, 20, 20]
+Node D DV = [10, 20, 20, 0, 20]
+Node E DV = [10, 20, 20, 20, 0]
+Number of rounds till convergence = 2
+-------
