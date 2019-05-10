@@ -1,0 +1,101 @@
+//MIT
+
+yu@yu-virtual-machine:~/cs555$ python3 my-dns-client.py mit.edu
+Preparing DNS query..
+Contacting DNS server..
+Sending DNS query..
+DNS response received (attempt 1 of 3)
+Processing DNS response..
+----------------------------------------------------------------------------
+header.ID = 19572
+header.QR = 1
+header.OPCODE = 0
+header.AA = 0
+header.TC = 0
+header.RD = 1
+header.RA = 1
+header.Z = 0
+header.RCODE = 0
+header.QDCOUNT = 1
+header.ANCOUNT = 1
+header.NSCOUNT = 0
+header.ARCOUNT = 0
+question.QNAME = mit.edu
+question.QTYPE = 1
+question.QCLASS = 1
+answer.NAME = 12
+answer.TYPE = 1
+answer.CLASS = 1
+answer.TTL = 19
+answer.RDLENGTH = 4
+answer.RDATA = 23.64.28.190
+----------------------------------------------------------------------------
+
+
+//Stanford
+
+yu@yu-virtual-machine:~/cs555$ python3 my-dns-client.py stanford.edu
+Preparing DNS query..
+Contacting DNS server..
+Sending DNS query..
+DNS response received (attempt 1 of 3)
+Processing DNS response..
+----------------------------------------------------------------------------
+header.ID = 19979
+header.QR = 1
+header.OPCODE = 0
+header.AA = 0
+header.TC = 0
+header.RD = 1
+header.RA = 1
+header.Z = 0
+header.RCODE = 0
+header.QDCOUNT = 1
+header.ANCOUNT = 1
+header.NSCOUNT = 0
+header.ARCOUNT = 0
+question.QNAME = stanford.edu
+question.QTYPE = 1
+question.QCLASS = 1
+answer.NAME = 12
+answer.TYPE = 1
+answer.CLASS = 1
+answer.TTL = 1780
+answer.RDLENGTH = 4
+answer.RDATA = 171.67.215.200
+----------------------------------------------------------------------------
+
+
+//CMU
+
+yu@yu-virtual-machine:~/cs555$ python3 my-dns-client.py cmu.edu
+Preparing DNS query..
+Contacting DNS server..
+Sending DNS query..
+DNS response received (attempt 1 of 3)
+Processing DNS response..
+----------------------------------------------------------------------------
+header.ID = 19982
+header.QR = 1
+header.OPCODE = 0
+header.AA = 0
+header.TC = 0
+header.RD = 1
+header.RA = 1
+header.Z = 0
+header.RCODE = 0
+header.QDCOUNT = 1
+header.ANCOUNT = 1
+header.NSCOUNT = 0
+header.ARCOUNT = 0
+question.QNAME = cmu.edu
+question.QTYPE = 1
+question.QCLASS = 1
+answer.NAME = 12
+answer.TYPE = 1
+answer.CLASS = 1
+answer.TTL = 21599
+answer.RDLENGTH = 4
+answer.RDATA = 128.2.42.10
+----------------------------------------------------------------------------
+
